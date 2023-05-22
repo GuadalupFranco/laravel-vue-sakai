@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import AppLayout from '@/layout/AppLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -11,7 +11,7 @@ const router = createRouter({
                 {
                     path: '/',
                     name: 'dashboard',
-                    component: () => import('@/views/Dashboard.vue')
+                    component: () => import('@/Pages/Dashboard.vue')
                 },
                 {
                     path: '/uikit/formlayout',
