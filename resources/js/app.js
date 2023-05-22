@@ -117,7 +117,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue, Ziggy)
+            //.use(ZiggyVue, Ziggy)
             .use(PrimeVue, {
                 ripple: true,
                 inputStyle: "outlined",
@@ -220,6 +220,8 @@ createInertiaApp({
             .component('TreeTable', TreeTable)
             .component('TriStateCheckbox', TriStateCheckbox)
             .component('VirtualScroller', VirtualScroller)
+
+            .mixin({ methods: { appRoute: route } })
 
             .mount(el);
     },
