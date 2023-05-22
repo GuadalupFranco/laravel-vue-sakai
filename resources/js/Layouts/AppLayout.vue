@@ -4,6 +4,7 @@ import AppTopbar from './AppTopbar.vue';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppConfig from './AppConfig.vue';
+import { Head } from '@inertiajs/vue3'
 import { useLayout } from '@/Layouts/composables/layout';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
@@ -58,6 +59,9 @@ const isOutsideClicked = (event) => {
 </script>
 
 <template>
+    <Head title="Site UPQ">
+        <link head-key="theme-css" id="theme-css" rel="stylesheet" type="text/css" href="/themes/lara-light-indigo/theme.css">
+    </Head>
     <div class="layout-wrapper" :class="containerClass">
         <app-topbar></app-topbar>
         <div class="layout-sidebar">
