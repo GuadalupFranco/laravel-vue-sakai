@@ -59,9 +59,7 @@ const isOutsideClicked = (event) => {
 </script>
 
 <template>
-    <Head title="Site UPQ">
-        <link head-key="theme-css" id="theme-css" rel="stylesheet" type="text/css" href="/themes/lara-light-indigo/theme.css">
-    </Head>
+    <Head title="Site UPQ" />
     <div class="layout-wrapper" :class="containerClass">
         <app-topbar></app-topbar>
         <div class="layout-sidebar">
