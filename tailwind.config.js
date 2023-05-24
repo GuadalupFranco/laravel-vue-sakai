@@ -14,11 +14,11 @@ export default {
 
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
         },
     },
 
-    plugins: [forms, typography],
+    plugins: [],
+    corePlugins: {
+        preflight: false
+    }
 };

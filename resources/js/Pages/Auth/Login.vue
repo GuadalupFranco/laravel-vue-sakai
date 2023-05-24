@@ -2,11 +2,7 @@
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Checkbox from 'primevue/checkbox'
 
 defineProps({
     canResetPassword: Boolean,
@@ -43,47 +39,50 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-                <InputError class="mt-2" :message="form.errors.email" />
+                <div class="flex flex-column gap-2">
+                    <label for="email" class="text-sm font-semibold">Correo</label>
+                    <InputText id="email" v-model="form.email" :class="{ 'p-invalid': form.errors.email }" required />
+                    <small id="email-error" class="text-sm text-red-600" v-if="form.errors.email">
+                        {{ form.errors.email }}
+                    </small>
+                </div>
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
+                <div class="flex flex-column">
+                    <label for="password" class="text-sm font-semibold">Contraseña</label>
+                    <div class="p-inputgroup mt-2">
+                        <span class="p-inputgroup-addon">
+                            <i class="pi pi-key"></i>
+                        </span>
+                        <Password id="password" v-model="form.password" class="flex bg-red-200"
+                            :class="{ 'p-invalid': form.errors.password }" :feedback="false" toggleMask required />
+                    </div>
+                    <small id="password-error" class="text-sm text-red-600" v-if="form.errors.password">
+                        {{ form.errors.password }}
+                    </small>
+                </div>
             </div>
 
             <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox v-model:checked="form.remember" name="remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
+                <div class="flex align-items-center">
+                    <Checkbox id="remember" v-model="form.remember" :binary="true" />
+                    <span class="ml-2 text-sm text-gray-600">Recordar</span>
+                </div>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="appRoute('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Forgot your password?
+            <div class="flex align-items-center justify-content-end mt-3">
+                <Link v-if="canResetPassword" :href="appRoute('password.request')"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 border-round-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                ¿Olvidaste tu contraseña?
+                </Link>
+                
+                <Link href="/register">
+                    <Button label="Registrarse" class="p-button-sm ml-4" severity="secondary" />
                 </Link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
+                <Button type="submit" label="Iniciar sesión" :disabled="form.processing" class="ml-3 text-sm font-semibold"
+                    :class="{ 'opacity-20': form.processing }" />
             </div>
         </form>
     </AuthenticationCard>
