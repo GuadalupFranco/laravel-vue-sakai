@@ -32,7 +32,12 @@ const router = createRouter({
                     path: '/noticias',
                     name: 'noticias',
                     component: () => import('@/Pages/Dashboard.vue')
-                }
+                },
+                {
+                    path: '/profile',
+                    name: 'profile',
+                    component: () => import('@/Pages/Profile/Show.vue')
+                },
             ]
         },
         {

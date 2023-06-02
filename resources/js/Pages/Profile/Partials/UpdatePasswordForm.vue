@@ -1,12 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -40,61 +35,59 @@ const updatePassword = () => {
 <template>
     <FormSection @submitted="updatePassword">
         <template #title>
-            Update Password
+            <div class="px-3 pt-3 text-color">
+                Actualizar contraseña
+            </div>
         </template>
 
         <template #description>
-            Ensure your account is using a long, random password to stay secure.
+            <div class="px-3 text-color-secondary">
+                Asegúrate de que tu cuenta tenga una contraseña larga y aleatoria para mantenerla segura.
+            </div>
         </template>
 
         <template #form>
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="current_password" value="Current Password" />
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
-                <InputError :message="form.errors.current_password" class="mt-2" />
+            <div class="col-11 md:col-6 lg:col-5">
+                <div class="flex flex-column gap-2">
+                    <label for="current_password" class="text-sm font-semibold">Contraseña actual</label>
+                    <Password id="current_password" v-model="form.current_password"
+                        :class="{ 'p-invalid': form.errors.current_password }" :feedback="false" toggleMask required />
+                    <small id="current_password-error" class="text-sm text-red-600 mt-2"
+                        v-if="form.errors.current_password">
+                        {{ form.errors.current_password }}
+                    </small>
+                </div>
             </div>
 
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password" value="New Password" />
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-                <InputError :message="form.errors.password" class="mt-2" />
+            <div class="col-11 md:col-6 lg:col-5">
+                <div class="flex flex-column gap-2">
+                    <label for="password" class="text-sm font-semibold">Nueva contraseña</label>
+                    <Password id="password" v-model="form.password" :class="{ 'p-invalid': form.errors.password }"
+                        :feedback="false" toggleMask required />
+                    <small id="password-error" class="text-sm text-red-600 mt-2" v-if="form.errors.password">
+                        {{ form.errors.password }}
+                    </small>
+                </div>
             </div>
 
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-                <InputError :message="form.errors.password_confirmation" class="mt-2" />
+            <div class="col-11 md:col-6 lg:col-5">
+                <div class="flex flex-column gap-2">
+                    <label for="password_confirmation" class="text-sm font-semibold">Confirmar contraseña</label>
+                    <Password id="password_confirmation" v-model="form.password_confirmation"
+                        :class="{ 'p-invalid': form.errors.password_confirmation }" :feedback="false" toggleMask required />
+                    <small id="password_confirmation-error" class="text-sm text-red-600 mt-2"
+                        v-if="form.errors.password_confirmation">
+                        {{ form.errors.password_confirmation }}
+                    </small>
+                </div>
             </div>
         </template>
 
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Saved.
-            </ActionMessage>
-
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </PrimaryButton>
+            <Button v-show="form.recentlySuccessful" severity="secondary" label="Guardado"
+                class="mr-3 font-semibold fadeout animation-duration-3000" />
+            <Button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" label="Guardar"
+                class="font-semibold" />
         </template>
     </FormSection>
 </template>

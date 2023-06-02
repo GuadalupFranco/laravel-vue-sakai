@@ -1,25 +1,20 @@
 <script setup>
 import { ref, reactive, nextTick } from 'vue';
-import DialogModal from './DialogModal.vue';
-import InputError from './InputError.vue';
-import PrimaryButton from './PrimaryButton.vue';
-import SecondaryButton from './SecondaryButton.vue';
-import TextInput from './TextInput.vue';
 
 const emit = defineEmits(['confirmed']);
 
 defineProps({
     title: {
         type: String,
-        default: 'Confirm Password',
+        default: 'Confirmar contraseña',
     },
     content: {
         type: String,
-        default: 'For your security, please confirm your password to continue.',
+        default: 'Por tu seguridad, por favor introduce tu contraseña para continuar.',
     },
     button: {
         type: String,
-        default: 'Confirm',
+        default: 'Confirmar',
     },
 });
 
@@ -40,7 +35,7 @@ const startConfirmingPassword = () => {
         } else {
             confirmingPassword.value = true;
 
-            setTimeout(() => passwordInput.value.focus(), 250);
+            //setTimeout(() => passwordInput.value.focus(), 250);
         }
     });
 };
@@ -75,44 +70,23 @@ const closeModal = () => {
         <span @click="startConfirmingPassword">
             <slot />
         </span>
-
-        <DialogModal :show="confirmingPassword" @close="closeModal">
-            <template #title>
-                {{ title }}
-            </template>
-
-            <template #content>
-                {{ content }}
-
-                <div class="mt-4">
-                    <TextInput
-                        ref="passwordInput"
-                        v-model="form.password"
-                        type="password"
-                        class="mt-1 block w-3/4"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                        @keyup.enter="confirmPassword"
-                    />
-
-                    <InputError :message="form.error" class="mt-2" />
+        <Dialog v-model:visible="confirmingPassword" modal :header="title" :style="{ width: '50vw' }">
+            {{ content }}
+            <div class="flex mt-4">
+                <Password id="password" ref="passwordInput" v-model="form.password" class="flex"
+                    :class="{ 'p-invalid': form.error }" :feedback="false" toggleMask required
+                    @keyup.enter="confirmPassword" />
+                <small id="password-error" class="text-sm text-red-600 mt-2" v-if="form.error">
+                    {{ form.error }}
+                </small>
+            </div>
+            <template #footer>
+                <div class="flex flex-wrap justify-content-end row-gap-2">
+                    <Button severity="secondary" label="Cancelar" class="font-semibold" @click="closeModal" />
+                    <Button severity="primary" :label="button" class="font-semibold ml-3"
+                        :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="confirmPassword" />
                 </div>
             </template>
-
-            <template #footer>
-                <SecondaryButton @click="closeModal">
-                    Cancel
-                </SecondaryButton>
-
-                <PrimaryButton
-                    class="ml-3"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                    @click="confirmPassword"
-                >
-                    {{ button }}
-                </PrimaryButton>
-            </template>
-        </DialogModal>
+        </Dialog>
     </span>
 </template>

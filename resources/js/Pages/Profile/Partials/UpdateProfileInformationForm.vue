@@ -1,13 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
-import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
     user: Object,
@@ -78,11 +75,15 @@ const clearPhotoFileInput = () => {
 <template>
     <FormSection @submitted="updateProfileInformation">
         <template #title>
-            Profile Information
+            <div class="px-3 pt-3 text-color">
+                Información del perfil
+            </div>
         </template>
 
         <template #description>
-            Update your account's profile information and email address.
+            <div class="px-3 text-color-secondary">
+                Actualiza la información de perfil y correo en tu cuenta.
+            </div>
         </template>
 
         <template #form>
@@ -128,33 +129,29 @@ const clearPhotoFileInput = () => {
             </div>
 
             <!-- Name -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    autocomplete="name"
-                />
-                <InputError :message="form.errors.name" class="mt-2" />
+            <div class="col-12 md:col-7 lg:col-4">
+                <div class="flex flex-column gap-2">
+                    <label for="name" class="text-sm font-semibold">Nombre</label>
+                    <InputText id="name" v-model="form.name" :class="{ 'p-invalid': form.errors.name }" required />
+                    <small id="name-error" class="text-sm text-red-600" v-if="form.errors.name">
+                        {{ form.errors.name }}
+                    </small>
+                </div>
             </div>
 
             <!-- Email -->
-            <div class="col-span-6 sm:col-span-4">
-                <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    autocomplete="username"
-                />
-                <InputError :message="form.errors.email" class="mt-2" />
+            <div class="col-12 md:col-7 lg:col-4">
+                <div class="flex flex-column gap-2">
+                    <label for="name" class="text-sm font-semibold">Correo</label>
+                    <InputText id="email" v-model="form.email" :class="{ 'p-invalid': form.errors.email }" required />
+                    <small id="email-error" class="text-sm text-red-600" v-if="form.errors.email">
+                        {{ form.errors.email }}
+                    </small>
+                </div>
 
                 <div v-if="$page.props.jetstream.hasEmailVerification && user.email_verified_at === null">
                     <p class="text-sm mt-2">
-                        Your email address is unverified.
+                        Tu correo no está verificado.
 
                         <Link
                             :href="appRoute('verification.send')"
@@ -163,25 +160,22 @@ const clearPhotoFileInput = () => {
                             class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             @click.prevent="sendEmailVerification"
                         >
-                            Click here to re-send the verification email.
+                            Click aquí para re-enviar el correo de verificación.
                         </Link>
                     </p>
 
                     <div v-show="verificationLinkSent" class="mt-2 font-medium text-sm text-green-600">
-                        A new verification link has been sent to your email address.
+                        Un nuevo link de verificación ha sido enviado a tu dirección de correo electrónico.
                     </div>
                 </div>
             </div>
         </template>
 
         <template #actions>
-            <ActionMessage :on="form.recentlySuccessful" class="mr-3">
-                Saved.
-            </ActionMessage>
-
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                Save
-            </PrimaryButton>
+            <Button v-show="form.recentlySuccessful" severity="secondary"
+                label="Guardado" class="mr-3 font-semibold fadeout animation-duration-3000"/>
+            <Button type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
+                label="Guardar" class="font-semibold"/>
         </template>
     </FormSection>
 </template>
